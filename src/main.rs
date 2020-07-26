@@ -1,4 +1,6 @@
 use std::io;
+pub mod generic;
+use generic::*;
 
 fn main() {
   let mut input = String::new();
@@ -12,10 +14,12 @@ fn main() {
 
 }
 
-fn parse(input: &str) -> bool {
+fn parse(input: &str) -> ParseResult {
   println!("debug: '{}'", input);
   match input {
-    "hey" => true,
-    _ => false,
+    // "cards" => { message: "success"},
+    // _ => AppError { message: "unknown command"},
+    "cards" => ParseResult::Command,
+    _ => ParseResult::AppError { message : "unknown" }
   }
 }
