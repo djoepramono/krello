@@ -1,7 +1,14 @@
 use std::fmt;
+use either::Either;
 
 pub struct AppError {
   message: &'static str,
+}
+
+impl fmt::Display for AppError {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+      write!(f, "{:?}", self.message)
+  }
 }
 
 pub enum Command {
@@ -9,33 +16,23 @@ pub enum Command {
   Boards
 }
 
-pub enum ParseResult<E, A> {
-  Error(E),
-  Success(A),
-}
-
-impl fmt::Display for ParseResult<AppError, Command> {
+impl fmt::Display for Command {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
       write!(f, "{:?}", match self {
-        ParseResult::Error(error) => error.message,
-        ParseResult::Success(command) => match command {
-          Command::Cards => "cards",
-          Command::Boards => "boards",
-        },
-    })
+        Command::Cards => "cards",
+        Command::Boards => "boards",
+      },)
   }
 }
-
 fn show_usage() -> &'static str {
-  "USAGE: krello <command> \n
-  where command: Cards | Boards
+  "USAGE: krello <command> where command: Cards | Boards
   "
 }
 
-pub fn parse(input: &str) -> ParseResult<AppError, Command> {
+pub fn parse(input: &str) -> Either<AppError, Command> {
   match input {
-    "cards" => ParseResult::Success( Command::Cards),
-    "boards" => ParseResult::Success( Command::Boards),
-    _ => ParseResult::Error(AppError { message : show_usage() }),
+    "cards" => Either::Right( Command::Cards),
+    "boards" => Either::Right( Command::Boards),
+    _ => Either::Left(AppError { message : show_usage() }),
   }
 }
