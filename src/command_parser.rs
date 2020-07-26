@@ -13,3 +13,11 @@ impl fmt::Display for ParseResult {
     })
   }
 }
+
+pub fn parse(input: &str) -> ParseResult {
+  println!("debug: '{}'", input);
+  match input {
+    "cards" => ParseResult::Command,
+    _ => ParseResult::AppError { message : "unknown command" }
+  }
+}

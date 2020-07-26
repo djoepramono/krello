@@ -1,6 +1,6 @@
 use std::io;
-pub mod generic;
-use generic::*;
+pub mod command_parser;
+use command_parser::*;
 
 fn main() {
   let mut input = String::new();
@@ -14,12 +14,3 @@ fn main() {
 
 }
 
-fn parse(input: &str) -> ParseResult {
-  println!("debug: '{}'", input);
-  match input {
-    // "cards" => { message: "success"},
-    // _ => AppError { message: "unknown command"},
-    "cards" => ParseResult::Command,
-    _ => ParseResult::AppError { message : "unknown" }
-  }
-}
