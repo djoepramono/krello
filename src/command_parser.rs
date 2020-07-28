@@ -24,15 +24,11 @@ impl fmt::Display for Command {
       },)
   }
 }
-fn show_usage() -> &'static str {
-  "USAGE: krello <command> where command: Cards | Boards
-  "
-}
 
 pub fn parse(input: &str) -> Either<AppError, Command> {
   match input {
     "cards" => Either::Right( Command::Cards),
     "boards" => Either::Right( Command::Boards),
-    _ => Either::Left(AppError { message : show_usage() }),
+    _ => Either::Left(AppError { message : "cannot parse command" }),
   }
 }

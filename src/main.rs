@@ -1,16 +1,21 @@
-use std::io;
+use std::env;
 pub mod command_parser;
 use command_parser::*;
+use either::Either;
 
 fn main() {
-  let mut input = String::new();
-
-  io::stdin().read_line(&mut input).ok().expect("Failed to read line");
+  let args: Vec<String> = env::args().collect();
+  let input = &args[1];
 
   let clean_input = input.trim();
-  println!("processing {}", clean_input);
   let output = parse(clean_input);
-  println!("result {}", output);
-
+  match output {
+    Either::Left(_) => print_usage(),
+    Either::Right(command) => println!("executing {}", command)
+  }
 }
 
+fn print_usage() -> () {
+  println!("USAGE:");
+  println!("krello <command> where command: Cards | Boards");
+}
