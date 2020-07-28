@@ -9,3 +9,5 @@ http.check-revoke = false
 edition = "2018"
 [dependencies]
 either = "1.5.3"
+reqwest = { version = "0.10.0-alpha.2", features = ["blocking"] }
+error-chain = "0.12.2"
