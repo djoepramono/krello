@@ -1,5 +1,11 @@
 My playground for learning Rust
 
+# Trello
+
+Generate token by visiting this [url](https://trello.com/1/authorize?key=trello-key&name=krello&expiration=30days&response_type=token&scope=read,write). Make sure you put you trello key and change the params as necessary.
+
+Full guide can be found [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/)
+
 # Running
 
 with Cargo
