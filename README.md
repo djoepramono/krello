@@ -4,13 +4,13 @@ My playground for learning Rust
 
 with Cargo
 ```
-cargo run -- <params>
+URL="http://httpbin.org/get" cargo run -- <params>
 ```
 
 after build
 
 ```
-krello <params>
+URL="http://httpbin.org/get" krello <params>
 ```
 
 # Development

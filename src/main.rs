@@ -2,6 +2,7 @@ use std::env;
 pub mod command_parser;
 use command_parser::*;
 use either::Either;
+use std::error::Error;
 
 fn main() {
   let args: Vec<String> = env::args().collect();
@@ -22,8 +23,9 @@ fn print_usage() -> () {
   println!("krello <command> where command: Cards | Boards");
 }
 
-fn send_reqwest() -> Result<(), reqwest::Error> {
-  let res = reqwest::blocking::get("http://httpbin.org/get")?;
+fn send_reqwest() -> Result<(), Box<dyn Error>> {
+  let url = env::var("URL")?;
+  let res = reqwest::blocking::get(&url)?;
   // let mut body = String::new();
   // res.read_to_string(&mut body)?;
   let body = res.text()?;
@@ -34,3 +36,4 @@ fn send_reqwest() -> Result<(), reqwest::Error> {
 
   Ok(())
 }
+
