@@ -26,12 +26,10 @@ fn print_usage() -> () {
 fn send_reqwest() -> Result<(), Box<dyn Error>> {
   let url = env::var("URL")?;
   let res = reqwest::blocking::get(&url)?;
-  // let mut body = String::new();
-  // res.read_to_string(&mut body)?;
-  let body = res.text()?;
+  println!("Status: {}", res.status());
+  println!("Headers:\n{:#?}", res.headers());
 
-  // println!("Status: {}", res.status());
-  // println!("Headers:\n{:#?}", res.headers());
+  let body = res.text()?;
   println!("Body:\n{}", body);
 
   Ok(())
