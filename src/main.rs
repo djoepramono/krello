@@ -2,8 +2,6 @@ use std::env;
 pub mod command_parser;
 use command_parser::*;
 use either::Either;
-// use reqwest::blocking;
-use error_chain::error_chain;
 
 fn main() {
   let args: Vec<String> = env::args().collect();
@@ -24,15 +22,7 @@ fn print_usage() -> () {
   println!("krello <command> where command: Cards | Boards");
 }
 
-// to bubble error ...
-error_chain! {
-  foreign_links {
-      Io(std::io::Error);
-      HttpRequest(reqwest::Error);
-  }
-}
-
-fn send_reqwest() -> Result<()> {
+fn send_reqwest() -> Result<(), reqwest::Error> {
   let res = reqwest::blocking::get("http://httpbin.org/get")?;
   // let mut body = String::new();
   // res.read_to_string(&mut body)?;
