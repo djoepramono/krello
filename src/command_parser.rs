@@ -18,7 +18,7 @@ pub enum Command {
 
 impl fmt::Display for Command {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-      write!(f, "{:?}", match self {
+      write!(f, "{}", match self {
         Command::Cards => "cards",
         Command::Boards => "boards",
       },)
