@@ -13,7 +13,8 @@ impl fmt::Display for AppError {
 
 pub enum Command {
   Cards,
-  Boards
+  Boards,
+  Search,
 }
 
 impl fmt::Display for Command {
@@ -21,6 +22,7 @@ impl fmt::Display for Command {
       write!(f, "{}", match self {
         Command::Cards => "cards",
         Command::Boards => "boards",
+        Command::Search => "search"
       },)
   }
 }
@@ -29,6 +31,7 @@ pub fn parse(input: &str) -> Either<AppError, Command> {
   match input {
     "cards" => Either::Right( Command::Cards),
     "boards" => Either::Right( Command::Boards),
+    "search" => Either::Right( Command::Search),
     _ => Either::Left(AppError { message : "cannot parse command" }),
   }
 }

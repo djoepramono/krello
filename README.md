@@ -12,13 +12,13 @@ Full guide can be found [here](https://developer.atlassian.com/cloud/trello/guid
 
 with Cargo
 ```
-URL="http://httpbin.org/get" cargo run -- <params>
+URL="http://httpbin.org/get" cargo run -- search <param>
 ```
 
 after build
 
 ```
-KRELLO_TOKEN="secret" TRELLO_API_KEY="public-key" krello <params>
+KRELLO_TOKEN="secret" TRELLO_API_KEY="public-key" krello search <params>
 ```
 
 ### References
