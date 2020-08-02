@@ -1,16 +1,10 @@
-use std::env;
 mod command_parser;
 mod trello_client;
 
 fn main() {
-  let args: Vec<String> = env::args().collect();
-  let input_command = &args[1];
-  let input_query = &args[2].trim();
-
-  let parse_output = command_parser::parse(input_command.trim());
-  match parse_output {
-    Result::Err(_) => print_usage(),
-    Result::Ok(command) => println!("{}", trello_client::send_request(command, input_query.to_string()).unwrap())
+  match command_parser::parse() {
+    Ok(subcommand) => println!("{}", trello_client::send_request(subcommand).unwrap()),
+    Err(e) => { println!("{}", e.message); print_usage(); },
   }
 }
 
