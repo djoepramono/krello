@@ -1,5 +1,4 @@
 use std::fmt;
-use either::Either;
 
 pub struct AppError {
   message: &'static str,
@@ -27,11 +26,11 @@ impl fmt::Display for Command {
   }
 }
 
-pub fn parse(input: &str) -> Either<AppError, Command> {
+pub fn parse(input: &str) -> Result<Command, AppError> {
   match input {
-    "cards" => Either::Right( Command::Cards),
-    "boards" => Either::Right( Command::Boards),
-    "search" => Either::Right( Command::Search),
-    _ => Either::Left(AppError { message : "cannot parse command" }),
+    "cards" => Result::Ok( Command::Cards),
+    "boards" => Result::Ok( Command::Boards),
+    "search" => Result::Ok( Command::Search),
+    _ => Result::Err(AppError { message : "cannot parse command" }),
   }
 }

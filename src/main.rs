@@ -1,7 +1,6 @@
 use std::env;
 mod command_parser;
 mod trello_client;
-use either::Either;
 
 fn main() {
   let args: Vec<String> = env::args().collect();
@@ -10,8 +9,8 @@ fn main() {
 
   let parse_output = command_parser::parse(input_command.trim());
   match parse_output {
-    Either::Left(_) => print_usage(),
-    Either::Right(command) => println!("{}", trello_client::send_request(command, input_query.to_string()).unwrap())
+    Result::Err(_) => print_usage(),
+    Result::Ok(command) => println!("{}", trello_client::send_request(command, input_query.to_string()).unwrap())
   }
 }
 
