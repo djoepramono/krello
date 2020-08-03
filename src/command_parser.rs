@@ -29,6 +29,7 @@ pub fn parse() -> Result<SearchSubcommand, AppError>{
       .short('q')
       .long("query")
       .takes_value(true)
+      .required(true)
       .about("search keyword")))
   .get_matches();
 
@@ -41,6 +42,6 @@ pub fn parse() -> Result<SearchSubcommand, AppError>{
 fn process_search_subcommand(subcommand_matches: &ArgMatches) -> Result<SearchSubcommand, AppError> {
   match subcommand_matches.value_of("query") {
     Some(query) => Ok(SearchSubcommand { value:  "search".to_string(), model_type: "boards".to_string(), query: query.to_string()}),
-    None => Err(AppError { message: "query not found" })
+    None => Err(AppError { message: "query not found" }) // should never happen if required = true
   }
 }
