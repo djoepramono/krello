@@ -1,6 +1,6 @@
 use std::fmt;
 use clap::{Arg, App, ArgMatches};
-// use std::option::NoneError;
+use crate::trello_client::ModelType;
 
 pub struct AppError {
   pub message: &'static str, // if this is not public you cannot instantiate this from other module
@@ -9,7 +9,7 @@ pub struct AppError {
 #[derive(Clone)]
 pub struct SearchSubcommand {
   pub value: String,
-  pub model_type: String, // why string? Because this type will be used as a return value, and it's better not be a reference
+  pub model_type: ModelType,
   pub query: String,
 }
 
@@ -47,14 +47,17 @@ pub fn parse() -> Result<SearchSubcommand, AppError>{
 }
 
 fn process_search_subcommand(subcommand_matches: &ArgMatches) -> Result<SearchSubcommand, AppError> {
-
   // ? operator on an option actually returns unstable Result<T, NoneError>
   // Thus it's better to convert Option to Result first via `ok_or`
   // ? also needs to be wrapped into function
   let process_subcommand_args = || -> Result<SearchSubcommand, AppError> {
-      let query = subcommand_matches.value_of("query").ok_or(AppError { message: "no query" })?;
-      let model_type = subcommand_matches.value_of("modelType").ok_or(AppError { message: "no query" })?;
-      Ok(SearchSubcommand { value:  "search".to_string(), model_type: model_type.to_string(), query: query.to_string()})
+      let query = subcommand_matches.value_of("query")
+        .ok_or(AppError { message: "no query supplied" })?;
+      let model_type = subcommand_matches.value_of("modelType")
+        .ok_or(AppError {message: "no model type supplied"})
+        .and_then(process_search_model_type)?;
+
+      Ok(SearchSubcommand { value:  "search".to_string(), model_type: model_type, query: query.to_string()})
   };
 
   if let Ok(subcommand) = process_subcommand_args() {
@@ -62,17 +65,12 @@ fn process_search_subcommand(subcommand_matches: &ArgMatches) -> Result<SearchSu
   } else {
     Err(AppError { message: "search does not have necessary arguments" })
   }
+}
 
-  // why not use if let? Because I want to preserve the wrapper type
-  // why not use ? operator
-  // let query = match subcommand_matches.value_of("query") {
-  //   Some(query) => Ok(SearchSubcommand { value:  "search".to_string(), model_type: "boards".to_string(), query: query.to_string()}),
-  //   None => Err(AppError { message: "query not found" }) // should never happen if required = true
-  // };
-
-  // let model_type = match subcommand_matches.value_of("modelType") {
-  //   Some(query) => Ok(SearchSubcommand { value:  "search".to_string(), model_type: "boards".to_string(), query: query.to_string()}),
-  //   None => Err(AppError { message: "model type not found" }) // should never happen if required = true
-  // };
-
+fn process_search_model_type(model_type: &str) -> Result<ModelType, AppError>{
+  match model_type {
+    "boards" => Ok(ModelType::Boards),
+    "cards" => Ok(ModelType::Cards),
+    _ => Err(AppError {message: "unknown search model type"})
+  }
 }

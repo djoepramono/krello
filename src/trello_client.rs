@@ -3,14 +3,17 @@ use std::fmt;
 use std::error::Error;
 use crate::command_parser::SearchSubcommand;
 
+#[derive(Clone)]
 pub enum ModelType {
-  Boards
+  Boards,
+  Cards
 }
 
 impl fmt::Display for ModelType {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
       write!(f, "{}", match self {
         ModelType::Boards => "boards",
+        ModelType::Cards => "cards",
       },)
   }
 }
@@ -21,7 +24,7 @@ pub fn send_request(search_subcommand: SearchSubcommand) -> Result<String, Box<d
 
   // use clone so that you don't move the reference
   let trello_url_base = get_base_trello_url(search_subcommand.clone(), api_key, token);
-  let model_types = [ModelType::Boards]; // this is slice not array
+  let model_types = [search_subcommand.model_type];
   let trello_url_suffix = get_trello_extra_params(&model_types, search_subcommand.query);
 
   let url = format!("{}{}", trello_url_base, trello_url_suffix);
