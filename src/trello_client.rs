@@ -26,9 +26,7 @@ pub fn send_request(search_subcommand: SearchSubcommand) -> Result<String, Box<d
 
   let url = format!("{}{}", trello_url_base, trello_url_suffix);
   let res = reqwest::blocking::get(&url)?;
-
   let body = res.text()?;
-  println!("Body:\n{}", body);
 
   Ok(body)
 }
