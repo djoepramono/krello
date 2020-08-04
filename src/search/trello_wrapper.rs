@@ -1,22 +1,6 @@
 use std::env;
-use std::fmt;
 use std::error::Error;
-use crate::command_parser::SearchSubcommand;
-
-#[derive(Clone)]
-pub enum ModelType {
-  Boards,
-  Cards
-}
-
-impl fmt::Display for ModelType {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-      write!(f, "{}", match self {
-        ModelType::Boards => "boards",
-        ModelType::Cards => "cards",
-      },)
-  }
-}
+use crate::search::{SearchSubcommand, ModelType};
 
 pub fn send_request(search_subcommand: SearchSubcommand) -> Result<String, Box<dyn Error>> {
   let api_key = env::var("TRELLO_API_KEY")?;

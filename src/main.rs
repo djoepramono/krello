@@ -1,9 +1,9 @@
 mod command_parser;
-mod trello_client;
+mod search;
 
 fn main() {
   match command_parser::parse() {
-    Ok(subcommand) => println!("{}", trello_client::send_request(subcommand).unwrap()),
+    Ok(subcommand) => println!("{}", search::trello_wrapper::send_request(subcommand).unwrap()),
     Err(e) => { println!("{}", e.message); print_usage(); },
   }
 }

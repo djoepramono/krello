@@ -4,8 +4,6 @@ name = "krello"
 version = "0.0.1"
 authors = ["Djoe Pramono"]
 
-http.check-revoke = false
-
 edition = "2018"
 [dependencies]
 # version 3 is not stable, and cannot have multiple arguments due to bug where it check uniqueness by name instead of id
