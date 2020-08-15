@@ -1,6 +1,6 @@
 mod command_parser;
 mod trello_wrapper;
-mod search;
+mod parser;
 
 fn main() {
   match command_parser::parse() {

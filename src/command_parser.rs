@@ -1,6 +1,6 @@
 use std::fmt;
 use clap::{Arg, App, ArgMatches};
-use crate::search::parser::process_search_subcommand;
+use crate::parser::search::process_search_subcommand;
 use crate::trello_wrapper::TrelloRequest;
 
 pub struct AppError {
@@ -32,23 +32,33 @@ pub fn parse() -> Result<TrelloRequest, AppError>{
       .takes_value(true)
       .required(true)
       .help("search model type"))
-  // ).subcommand(App:: new("cards")
-  //   .about("send request to cards API end point")
-  //   .arg(Arg::with_name("id")
-  //     .short("i")
-  //     .long("id")
-  //     .takes_value(true)
-  //     .required(true)
-  //     .help("cards keyword"))
+  ).subcommand(App:: new("cards")
+    .about("send request to cards API end point")
+    .arg(Arg::with_name("id")
+      .short("i")
+      .long("id")
+      .takes_value(true)
+      .required(true)
+      .help("cards keyword"))
   ).get_matches();
 
-  match matches.subcommand_matches("search") {
-    Some(subcommand_matches) => process_search_subcommand(subcommand_matches),
-    None => Err(AppError { message: "search_not_found" })
-  }
+  let maybe_search_request = matches.subcommand_matches("search").and_then(process_search_subcommand).ok_or(AppError {message: "boom"});
 
-  // match matches.subcommand_matches("cards") {
+  maybe_search_request
+
+  // let maybe_cards_request = matches.subcommand_matches("cards").and_then(process_cards_subcommand);
+
+  // let a = match matches.subcommand_matches("search") {
+  //   Some(subcommand_matches) => process_search_subcommand(subcommand_matches),
+  //   None => Err(AppError { message: "search_not_found" })
+  // };
+
+
+  // let b = match matches.subcommand_matches("cards") {
   //   Some(subcommand_matches) => process_search_subcommand(subcommand_matches),
   //   None => Err(AppError { message: "cards_not_found" })
   // };
+
+  // a.and(b)
 }
+
