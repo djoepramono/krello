@@ -1,6 +1,7 @@
 use std::fmt;
 use clap::{Arg, App, ArgMatches};
 use crate::parser::search::process_search_subcommand;
+use crate::parser::cards::process_cards_subcommand;
 use crate::trello_wrapper::TrelloRequest;
 
 pub struct AppError {
@@ -42,23 +43,15 @@ pub fn parse() -> Result<TrelloRequest, AppError>{
       .help("cards keyword"))
   ).get_matches();
 
-  let maybe_search_request = matches.subcommand_matches("search").and_then(process_search_subcommand).ok_or(AppError {message: "boom"});
+  let maybe_search_request = matches.subcommand_matches("search").and_then(process_search_subcommand);
+  let maybe_cards_request = matches.subcommand_matches("cards").and_then(process_cards_subcommand);
 
-  maybe_search_request
-
-  // let maybe_cards_request = matches.subcommand_matches("cards").and_then(process_cards_subcommand);
-
-  // let a = match matches.subcommand_matches("search") {
-  //   Some(subcommand_matches) => process_search_subcommand(subcommand_matches),
-  //   None => Err(AppError { message: "search_not_found" })
-  // };
-
-
-  // let b = match matches.subcommand_matches("cards") {
-  //   Some(subcommand_matches) => process_search_subcommand(subcommand_matches),
-  //   None => Err(AppError { message: "cards_not_found" })
-  // };
-
-  // a.and(b)
+  match maybe_search_request {
+    Some(tr) => Ok(tr),
+    None => match maybe_cards_request {
+      Some(tr) => Ok(tr),
+      None => Err(AppError {message: "unknown subcommand detected"})
+    }
+  }
 }
 
