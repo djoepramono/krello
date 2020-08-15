@@ -2,10 +2,12 @@ use clap::{ArgMatches};
 use std::collections::HashMap;
 use crate::trello_wrapper::TrelloRequest;
 
+//Not sure if returning Option is better than Result
 pub fn process_search_subcommand(subcommand_matches: &ArgMatches) -> Option<TrelloRequest> {
   let query = subcommand_matches.value_of("query");
   let model_type = subcommand_matches.value_of("modelType");
 
+  //If any of the following is None, then None
   if query.and(model_type) == None {
     None
   } else {
