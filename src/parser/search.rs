@@ -10,7 +10,7 @@ pub fn process_search_subcommand(subcommand_matches: &ArgMatches) -> Option<Trel
     None
   } else {
     let url_params = build_search_url_params(model_type.unwrap().to_string(), query.unwrap().to_string());
-    Some(TrelloRequest { endpoint: "search".to_string(), url_params: url_params})
+    Some(TrelloRequest { endpoint: "search".to_string(), url_params: Some(url_params)})
   }
 }
 

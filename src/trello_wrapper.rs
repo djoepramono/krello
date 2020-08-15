@@ -5,7 +5,7 @@ use std::collections::HashMap;
 #[derive(Clone)]
 pub struct TrelloRequest{
   pub endpoint: String,
-  pub url_params: HashMap<String, String> // Try play reference and lifetime later
+  pub url_params: Option<HashMap<String, String>> // Try play reference and lifetime later
 }
 
 pub fn send_request(trello_request: TrelloRequest) -> Result<String, Box<dyn Error>> {
@@ -13,7 +13,10 @@ pub fn send_request(trello_request: TrelloRequest) -> Result<String, Box<dyn Err
   let token = env::var("KRELLO_TOKEN")?;
 
   let trello_url_base = get_base_trello_url(trello_request.endpoint, api_key, token);
-  let trello_url_suffix = get_trello_url_params(trello_request.url_params);
+  let trello_url_suffix = match trello_request.url_params {
+    Some(url_params) => get_trello_url_params(url_params),
+    None => String::new(),
+  };
 
   let url = format!("{}{}", trello_url_base, trello_url_suffix);
   let res = reqwest::blocking::get(&url)?;
